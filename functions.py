@@ -1,5 +1,6 @@
 # Toolkit file____________________________________________________________________________
 from structures import *
+from collections import Counter
 
 
 def valid_seq(dna):
@@ -53,11 +54,19 @@ def gc_content_subseq(seq, k=20):
     return gc
 
 
-def translation(rna):
+def translation(rna, init_pos = 0):
     """Gives the sequence of aminoacids translated from a RNA sequence"""
-    protein = ""
-    for i in range(0, len(rna), 3):
-        codon = rna[i:i+3]
-        protein = protein + aminoacids[codon]
-    return protein
+    return "".join(aminoacids[rna[pos:pos + 3]] for pos in range(init_pos, len(rna)-2, 3))
 
+def codon_usage(rna, aa):
+    """Returns the frequency of every codon that encodes for a particular aminoacid in the RNA"""
+    tmpList = []
+    for i in range(0, len(rna)-2, 3):
+        codon = rna[i:i+3]
+        if aminoacids[codon] == aa:
+            tmpList.append(codon)
+    freqs = dict(Counter(tmpList))
+    total = sum(freqs.values())
+    for seq in freqs:
+        freqs[seq] = round(freqs[seq] / total, 2)
+    return freqs
