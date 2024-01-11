@@ -22,5 +22,8 @@ print(f"5' {reverse_complement(DNAstr)} 3'\n")
 print(f"[5] GC Content: {gc_content(DNAstr)}%\n")
 print(f"[6] GC Content: {gc_content_subseq(DNAstr, 5)}%\n")
 print(f"[7] Protein translation: {translation(RNAstr)}\n")
-
 print(f"[8] Codon frequency (L): {codon_usage(RNAstr, "L")}\n")
+
+print(f"[9] Reading frames:")
+for seq in reading_frames(RNAstr):
+    print(*seq)

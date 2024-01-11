@@ -7,6 +7,13 @@ complementary_bases = {
     "G": "C"
 }
 
+complementary_rna_bases = {
+    "A": "U",
+    "U": "A",
+    "C": "G",
+    "G": "C"
+}
+
 # M = start
 # '_' = stop
 aminoacids = {

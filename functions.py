@@ -34,6 +34,9 @@ def complement(dna):
     """Gives the complementary sequence of a DNA: AAT -> TTA"""
     return "".join([complementary_bases[i] for i in dna])
 
+def complement_rna(rna):
+    """Gives the complementary sequence of a RNA: AAU -> UUA"""
+    return "".join([complementary_rna_bases[i] for i in rna])
 
 def reverse_complement(dna):
     """Gives the reversed complementary seq of DNA: ATT -> AAT"""
@@ -70,3 +73,25 @@ def codon_usage(rna, aa):
     for seq in freqs:
         freqs[seq] = round(freqs[seq] / total, 2)
     return freqs
+
+def reading_frames(rna):
+    """Returns the 6 reading frames of a RNA sequence, including complement"""
+    frames = []
+    rna_c = complement_rna(rna)
+    frames.append(translation(rna, 0))
+    frames.append(translation(rna, 1))
+    frames.append(translation(rna, 2))
+    frames.append(translation(rna_c, 0))
+    frames.append(translation(rna_c, 1))
+    frames.append(translation(rna_c, 2))
+    return frames
+
+def reading_frames(rna):
+    """Returns the 6 reading frames of a RNA sequence, including complement"""
+    frames = []
+    rna_c = complement_rna(rna)
+    for i in range(0,3):
+        f1, f2 = translation(rna, i), translation(rna_c, i)
+        frames.append(f1)
+        frames.append(f2)
+    return frames
