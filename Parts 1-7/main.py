@@ -1,6 +1,5 @@
 from functions import *
 from structures import *
-from functions_optimized import *
 import random
 
 
@@ -47,5 +46,3 @@ print(f"All possible proteins:")
 for prot in all_proteins(ins_rna, 0, 0, True):
     print(f"-- {prot}\n")
       
-
-
