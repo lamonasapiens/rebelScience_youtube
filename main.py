@@ -1,10 +1,11 @@
 from functions import *
+from structures import *
 from functions_optimized import *
 import random
 
 
 # Create a random RNA sequence for testing:
-random_DNA = "".join([random.choice(nucleotides) for i in range(30)])
+random_DNA = "".join([random.choice(nucleotides) for i in range(90)])
 DNAstr = valid_seq(random_DNA)
 RNAstr = transcription(DNAstr)
 
@@ -27,3 +28,24 @@ print(f"[8] Codon frequency (L): {codon_usage(RNAstr, "L")}\n")
 print(f"[9] Reading frames:")
 for seq in reading_frames(RNAstr):
     print(*seq)
+
+print(f"[10] All possible proteins:")
+for prot in all_proteins(RNAstr, 0, 0, True):
+    print(prot)
+
+
+
+"""__________________________________________________________________________"""
+"""*PRACTICE WITH REAL PROTEINS*"""
+
+
+print("_____________________________\n*INSULIN PROTEIN PRACTICE*\n")
+print("Homo sapiens insulin (INS), transcript variant 1, mRNA:")
+print(f"{NM_000207}\n")
+ins_rna = transcription(NM_000207)
+print(f"All possible proteins:")
+for prot in all_proteins(ins_rna, 0, 0, True):
+    print(f"-- {prot}\n")
+      
+
+
