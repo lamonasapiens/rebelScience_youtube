@@ -90,7 +90,7 @@ def proteins(aa_seq):
         
 def all_proteins(rna, start_pos=0, end_pos=0, ordered=False):
     """Returns a list of all possible proteins from one aminoacid sequence and
-    its compementary, while being able to set the start and end positions.
+    its compementary. You can set the start and end positions.
     
     Protein search DB: https://www.ncbi.nlm.nih.gov/nuccore/NM_001185097.2
     
