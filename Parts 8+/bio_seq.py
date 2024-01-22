@@ -1,4 +1,4 @@
-from bio_structs import DNA_codons, nucleotides
+from bio_structs import DNA_codons, nucleotides, RNA_codons
 from collections import Counter
 import random
 import re
@@ -14,7 +14,7 @@ class BioSeq:
         
     def __validate(self):
         """Checks the sequence to make sure it is a DNA string"""
-        return set(nucleotides).issuperset(self.seq)
+        return set(nucleotides[self.seq_type]).issuperset(self.seq)
 
     def get_seq_biotype(self):
         """Returns sequence type"""
@@ -24,9 +24,9 @@ class BioSeq:
         """Returns 4 strings with sequence information"""
         return f"[Label]: {self.label}\n[Sequence]: {self.seq}\n[Biotype]: {self.seq_type}\n[Length]: {len(self.seq)}\n"
     
-    def generate_random_dna(self, length=10, seq_type="DNA"):
-        """Generates a random DNA sequence provided the length"""
-        seq= "".join([random.choice(nucleotides) for i in range(length)])
+    def generate_random_seq(self, length=10, seq_type="DNA"):
+        """Generates a random DNA or RNA sequence provided the length"""
+        seq= "".join([random.choice(nucleotides[seq_type]) for i in range(length)])
         self.__init__(seq, seq_type, "Randomly generated sequence")
     
     def count_bases(self):
@@ -35,16 +35,24 @@ class BioSeq:
     
     def transcription(self):
         """DNA -> RNA transcription"""
-        return self.seq.replace("T", "U")
+        if self.seq_type == "DNA":
+            return self.seq.replace("T", "U")
+        return "Not a DNA sequence"
     
     def complement(self):
-        """Returns the complementary sequence of a DNA: AAT -> TTA"""
-        mapping = str.maketrans("ATCG", "TAGC")
+        """Returns the complementary sequence of a DNA or RNA: CCG -> GGC"""
+        if self.seq_type == "DNA":
+            mapping = str.maketrans("ATCG", "TAGC")
+        else:
+            mapping = str.maketrans("AUCG", "UAGC")
         return self.seq.translate(mapping)
     
     def reverse_complement(self):
-        """Returns the reversed complementary sequence of a DNA: AAT -> ATT"""
-        mapping = str.maketrans("ATCG", "TAGC")
+        """Returns the reversed complementary sequence of a DNA: CCG -> CGG"""
+        if self.seq_type == "DNA":
+            mapping = str.maketrans("ATCG", "TAGC")
+        else:
+            mapping = str.maketrans("AUCG", "UAGC")
         return self.seq.translate(mapping)[::-1]
     
     def gc_content(self):
@@ -61,16 +69,27 @@ class BioSeq:
         return gc
      
     def translation(self, init_pos = 0):
-        """Returns the sequence of aminoacids translated from a DNA sequence"""
-        return "".join(DNA_codons[self.seq[pos:pos + 3]] for pos in range(init_pos, len(self.seq)-2, 3))
+        """Returns the sequence of aminoacids translated from a DNA or RNA sequence"""
+        if self.seq_type == "DNA":
+            return "".join(DNA_codons[self.seq[pos:pos + 3]] for pos in range(init_pos, len(self.seq)-2, 3))
+        else:
+            return "".join(RNA_codons[self.seq[pos:pos + 3]] for pos in range(init_pos, len(self.seq)-2, 3))
     
     def codon_usage(self, aa):
-        """Returns the frequency of every codon that encodes for a particular aminoacid in the RNA"""
+        """Returns the frequency of every codon that encodes for a particular aminoacid in the DNA or RNA"""
         tmpList = []
-        for i in range(0, len(self.seq)-2, 3):
-            codon = self.seq[i:i+3]
-            if DNA_codons[codon] == aa:
-                tmpList.append(codon)
+        if self.seq_type == "DNA":
+            for i in range(0, len(self.seq)-2, 3):
+                codon = self.seq[i:i+3]
+                if DNA_codons[codon] == aa:
+                    tmpList.append(codon)
+
+        else:
+            for i in range(0, len(self.seq)-2, 3):
+                codon = self.seq[i:i+3]
+                if RNA_codons[codon] == aa:
+                    tmpList.append(codon)
+
         freqs = dict(Counter(tmpList))
         total = sum(freqs.values())
         for seq in freqs:
